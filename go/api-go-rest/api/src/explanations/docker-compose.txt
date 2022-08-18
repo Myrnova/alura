@@ -1,0 +1,26 @@
+version: '3' //versão do docker que sera utilizada
+services:
+  postgres: //primeiro container
+    image: "postgres" // utilizaremos o postgres
+    environment: //informações da imagem
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=root      
+    ports:
+      - "5433:5432" // a primeira porta é que a sera "exposta" no nosso computador a segunda é a porta do container do docker
+    volumes:
+      - ./migrations/docker-database-initial.sql:/docker-entrypoint-initdb.d/docker-database-initial.sql  
+       // adicionamos a migration dentro do container e será rodada automaticamente quando o contaienr inicia
+
+  pgadmin-compose: // segundo container
+    image: dpage/pgadmin4
+    environment: //informações que serao utilziadas pela imagem
+      PGADMIN_DEFAULT_EMAIL: "debora.cavallari@hotmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "123456"
+    ports:
+      - "54331:80"
+    depends_on: 
+      - postgres
+
+
+      
